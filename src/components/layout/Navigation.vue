@@ -3,20 +3,39 @@ import { RouterLink } from 'vue-router';
 import login_image from '@/assets/images/login.svg';
 import storage_image from '@/assets/images/storage.svg';
 import add_image from '@/assets/images/add.svg';
+import { useAuthenticatedStore } from '@/stores/authstore';
+import { onMounted, ref, watch } from 'vue';
 
+const authStore = useAuthenticatedStore();
+const loggedIn = ref(false);
+
+
+
+watch(() => authStore.isAuthenticated, (newValue, oldValue) => {
+    loggedIn.value = newValue;
+});
+
+onMounted(async () => {
+    try {
+        loggedIn.value = await authStore.isAuthenticated;
+    } catch(error) {
+        console.error(error);
+    }
+});
 </script>
 
 <template>
     <nav class="w-full flex justify-center fixed bottom-0 md:relative">
-        <ul class="list-none flex flex-row-reverse justify-evenly md:justify-between w-200 max-w-screen md:max-w-[95%] bg-sky-400 px-2 md:px-10 md:rounded-bl-2xl md:rounded-br-2xl">
+        <ul class="list-none flex flex-row-reverse justify-evenly md:justify-between w-200 max-w-screen md:max-w-[95%] bg-sky-400 p-2 md:py-0 md:px-10 md:rounded-bl-xl md:rounded-br-xl">
             <li>
                 <RouterLink to="/">
                     <img :src="login_image" alt="Login"  />
-                    <span>Login</span>
+                    <span v-if="loggedIn">Log out</span>
+                    <span v-else>Log in</span>
                 </RouterLink>
             </li>
             <li>
-                <RouterLink to="/games">
+                <RouterLink to="/storage">
                     <img :src="storage_image" alt="Storage" />
                     <span>Storage</span>
                 </RouterLink>
@@ -39,7 +58,7 @@ import add_image from '@/assets/images/add.svg';
  }
 @layer base {
     span {
-        @apply font-bold text-xl hidden md:block;
+        @apply font-bold hidden md:block;
     }
 
     a {
@@ -47,7 +66,7 @@ import add_image from '@/assets/images/add.svg';
     }
     
     img {
-        @apply w-15 mt-auto;
+        @apply w-12 mt-auto;
     }
 }
 </style>
