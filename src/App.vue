@@ -1,11 +1,22 @@
-<script setup></script>
+<script setup>
+import { RouterView } from 'vue-router';
+import Header from './components/layout/Header.vue';
+import Footer from './components/layout/Footer.vue';
+import Navigation from './components/layout/Navigation.vue';
+
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <div class="flex flex-col min-h-screen">
+    <Header />
+    <div class="flex-1 flex flex-col-reverse md:flex-col relative">
+      <Navigation />
+      <main class="container">
+        <RouterView />
+      </main>
+    </div>
+    <Footer />
+  </div>
 </template>
 
 <style scoped></style>
