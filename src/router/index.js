@@ -1,6 +1,6 @@
-import AddPage from '@/components/pages/AddPage.vue';
-import LoginPage from '@/components/pages/LoginPage.vue';
-import StoragePage from '@/components/pages/StoragePage.vue';
+import AddPage from '@/components/views/AddPage.vue';
+import LoginPage from '@/components/views/LoginPage.vue';
+import StoragePage from '@/components/views/StoragePage.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
