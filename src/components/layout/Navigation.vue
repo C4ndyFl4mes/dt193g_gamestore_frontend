@@ -25,7 +25,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <nav class="w-full flex justify-center fixed bottom-0 md:relative">
+    <nav class="w-full flex justify-center fixed bottom-0 md:relative z-10">
         <ul class="list-none flex flex-row-reverse justify-evenly md:justify-between w-200 max-w-screen md:max-w-[95%] bg-sky-400 p-2 md:py-0 md:px-10 md:rounded-bl-xl md:rounded-br-xl">
             <li>
                 <RouterLink to="/">

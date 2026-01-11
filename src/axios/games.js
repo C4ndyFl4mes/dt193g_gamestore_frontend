@@ -13,8 +13,8 @@ export default function games() {
         }
     };
 
-    async function get() {
-        const res = await client.get('/products', config);
+    async function get(order) {
+        const res = await client.get(`/products?order_by=${order}`, config);
         return res.data;
     }
 
