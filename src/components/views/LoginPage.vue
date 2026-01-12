@@ -82,7 +82,7 @@ onMounted(async () => {
                     <span>Password</span>
                     <input type="password" name="password" v-model="user.password" autocomplete="current-password" placeholder=". . .">
                 </label>
-                <button type="submit" class="bg-green-400 mx-auto px-4 py-2 rounded-md mt-2">Authenticate</button>
+                <button type="submit" class="bg-green-400 mx-auto px-4 py-2 rounded-md mt-2 cursor-pointer">Authenticate</button>
             </div>
             <div v-if="serverResponse" class="w-100 max-w-[95%] mx-auto text-center p-4 rounded-xl" :class="serverResponse.success ? 'bg-green-300 mt-4' : 'bg-red-300 mt-4'">
                 <p>{{ serverResponse.message }}</p>
@@ -90,7 +90,7 @@ onMounted(async () => {
         </fieldset>
     </form>
     <div v-else class="mx-auto mt-38 md:mt-20">
-        <button class="bg-green-400 px-4 py-2 rounded-md mt-2" @click="logout">Log out</button>
+        <button class="bg-green-400 px-4 py-2 rounded-md mt-2 cursor-pointer" @click="logout">Log out</button>
     </div>
 </template>
 
