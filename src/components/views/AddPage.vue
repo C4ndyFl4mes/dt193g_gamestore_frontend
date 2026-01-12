@@ -4,8 +4,6 @@ import GameForm from '../base/GameForm.vue';
 import GenreForm from '../base/GenreForm.vue';
 
 const formStatus = ref(false);
-
-
 </script>
 
 <template>

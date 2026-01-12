@@ -5,6 +5,7 @@ import games from '@/axios/games';
 
 const emit = defineEmits(['close', 'updatedGame', 'deleteGame']);
 
+// Tar emot props från föräldrakomponenten.
 const props = defineProps({
     on_page: {
         type: String,
@@ -44,8 +45,10 @@ const props = defineProps({
     }
 });
 
+// Hanterar serverresponsen.
 const serverResponse = ref(null);
 
+// Fyller i formulärfält med props-värden.
 const fields = ref({
     id: props.id,
     image: props.image,
@@ -57,6 +60,7 @@ const fields = ref({
     genres: props.genres
 });
 
+// Tar bort ett spel.
 async function remove() {
     try {
         const data = await games().remove(Number(fields.value.id));
@@ -75,12 +79,14 @@ async function remove() {
     }
 }
 
+// Hanterar filändring för bilduppladdning.
 function onFileChange(e) {
     const file = e.target?.files?.[0];
     if (!file) return;
     fields.value.image = file;
 }
 
+// Hanterar formulärinlämning. Olika beteenden beroende på "on_page" prop.
 async function onSubmit() {
     switch (props.on_page) {
         case "add":
@@ -144,6 +150,7 @@ async function onSubmit() {
     }
 }
 
+// Hanterar avbrytning/ stängning av formuläret.
 function onCancel() {
     fields.value = {
         id: props.id,

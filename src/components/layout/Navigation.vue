@@ -9,12 +9,12 @@ import { onMounted, ref, watch } from 'vue';
 const authStore = useAuthenticatedStore();
 const loggedIn = ref(false);
 
-
-
-watch(() => authStore.isAuthenticated, (newValue, oldValue) => {
+// Övervakar autentiseringsstatusen och uppdaterar loggedIn-variabeln.
+watch(() => authStore.isAuthenticated, (newValue) => {
     loggedIn.value = newValue;
 });
 
+// Initialiserar loggedIn-variabeln vid montering av komponenten.
 onMounted(async () => {
     try {
         loggedIn.value = await authStore.isAuthenticated;

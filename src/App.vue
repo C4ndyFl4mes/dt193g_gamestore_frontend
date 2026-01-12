@@ -8,6 +8,7 @@ import { onMounted } from 'vue';
 
 const authStore = useAuthenticatedStore();
 
+// Sätter autentiseringsstatus vid montering av applikationen.
 onMounted(async () => {
   try {
     await authStore.setAuthenticationStatus();

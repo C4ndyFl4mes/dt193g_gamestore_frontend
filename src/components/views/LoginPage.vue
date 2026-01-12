@@ -1,18 +1,20 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import authentication from '@/axios/authentication.js';
 import { useAuthenticatedStore } from '@/stores/authstore';
-
 
 const user = ref({
     username: '',
     password: ''
 });
 
+const serverResponse = ref(null);
+
 const loggedIn = ref(false);
 
 const authStore = useAuthenticatedStore();
 
+// Hanterar inloggningsformulärets inlämning.
 async function onSubmit() {
     try {
         const res = await authentication().login(user.value);
@@ -21,27 +23,49 @@ async function onSubmit() {
             username: '',
             password: ''
         }
-        console.log(res);
 
         await authStore.setAuthenticationStatus();
     } catch (error) {
         console.error(error);
+        if (error.code === "ERR_BAD_REQUEST") {
+            if (error.response.data.message === "Validation error") {
+                serverResponse.value = {
+                    success: error.response.data.success,
+                    message: error.response.data.errors[0].instancePath.replace("/", "") + " " + error.response.data.errors[0].message
+                };
+            } else {
+                serverResponse.value = {
+                    success: false,
+                    message: error.response.data.message
+                };
+            }
+        }
     }
 };
 
+// Hanterar utloggning.
 async function logout() {
     try {
         const res = await authentication().logout();
-        console.log(res);
         await authStore.setAuthenticationStatus();
-        console.log("b");
     } catch (error) {
         console.error(error);
     }
 }
 
+// Övervakar autentiseringsstatusen och uppdaterar loggedIn-variabeln.
 watch(() => authStore.isAuthenticated, (newValue) => {
    loggedIn.value = newValue;
+});
+
+// Sätter autentiseringsstatus vid montering av komponenten.
+onMounted(async () => {
+    try {
+        await authStore.setAuthenticationStatus();
+        loggedIn.value = authStore.isAuthenticated;
+    } catch (error) {
+        console.error(error);
+    }
 });
 </script>
 
@@ -59,6 +83,9 @@ watch(() => authStore.isAuthenticated, (newValue) => {
                     <input type="password" name="password" v-model="user.password" autocomplete="current-password" placeholder=". . .">
                 </label>
                 <button type="submit" class="bg-green-400 mx-auto px-4 py-2 rounded-md mt-2">Authenticate</button>
+            </div>
+            <div v-if="serverResponse" class="w-100 max-w-[95%] mx-auto text-center p-4 rounded-xl" :class="serverResponse.success ? 'bg-green-300 mt-4' : 'bg-red-300 mt-4'">
+                <p>{{ serverResponse.message }}</p>
             </div>
         </fieldset>
     </form>

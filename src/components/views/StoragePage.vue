@@ -13,10 +13,12 @@ const gamesList = ref([]);
 const sortingOn = ref("title");
 const sortingOrder = ref("_asc");
 
+// Hanterar borttagning av ett spel.
 function remove(deletedGameId) {
     gamesList.value = gamesList.value.filter(game => game.id !== deletedGameId);
 }
 
+// Hanterar uppdatering av ett spel.
 function update(updatedGame) {
     const index = gamesList.value.findIndex(game => game.id === updatedGame.id);
     if (index !== -1) {
@@ -24,6 +26,7 @@ function update(updatedGame) {
     }
 }
 
+// Hanterar ändring av sorteringsfält.
 function on() {
     if (sortingOn.value === "title") {
         sortingOn.value = "stock";
@@ -32,6 +35,7 @@ function on() {
     }
 }
 
+// Hanterar ändring av sorteringsordning.
 function order() {
     if (sortingOrder.value === "_asc") {
         sortingOrder.value = "_desc";
@@ -40,6 +44,7 @@ function order() {
     }
 }
 
+// Hämtar sorterade spel från servern.
 async function sort() {
     const data = await games().get(sortingOn.value + sortingOrder.value);
     if (data.success) {
@@ -47,6 +52,7 @@ async function sort() {
     }
 }
 
+// Övervakar ändringar i sorteringsfält och ordning för att uppdatera spel-listan.
 watch(() => sortingOn.value, async () => {
     try {
         await sort();
@@ -55,6 +61,7 @@ watch(() => sortingOn.value, async () => {
     }
 });
 
+// Övervakar ändringar i sorteringsordning för att uppdatera spel-listan.
 watch(() => sortingOrder.value, async () => {
     try {
         await sort();
@@ -63,6 +70,7 @@ watch(() => sortingOrder.value, async () => {
     }
 });
 
+// Hämtar spel från servern vid montering av komponenten.
 onMounted(async () => {
     try {
         const data = await games().get();

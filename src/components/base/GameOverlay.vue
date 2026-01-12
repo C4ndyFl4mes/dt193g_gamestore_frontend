@@ -5,6 +5,7 @@ import GameForm from './GameForm.vue';
 
 const emit = defineEmits(['close', 'updatedGame', 'deleteGame']);
 
+// Tar emot props från föräldrakomponenten.
 const props = defineProps({
     game: {
         type: Object,
@@ -12,9 +13,13 @@ const props = defineProps({
     }
 });
 
+// Håller reda på om redigeringsläget är aktivt.
 const editing = ref(false);
+
+// Hanterar serverresponsen.
 const serverResponse = ref(null);
 
+// Uppdaterar lagersaldo för spelet.
 async function updateStock() {
     try {
         const data = await games().put(props.game.id, props.game);

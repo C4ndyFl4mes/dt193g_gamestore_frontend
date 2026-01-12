@@ -4,6 +4,7 @@ import low_image from '@/assets/images/low.svg';
 import out_image from '@/assets/images/out.svg';
 import { onMounted, ref, watch } from 'vue';
 
+// Tar emot props från föräldrakomponenten.
 const props = defineProps({
     image: {
         type: String,
@@ -19,6 +20,7 @@ const props = defineProps({
     }
 });
 
+// Definierar olika lagerstatusar baserat på lagersaldo.
 const states = [
     {
         image: stocked_image,
@@ -34,8 +36,10 @@ const states = [
     }
 ];
 
+// Håller reda på den aktuella lagersstatusen.
 const current_state = ref(null);
 
+// Uppdaterar lagersstatusen när lagersaldot ändras.
 watch(() => props.stock, (newStock) => {
     if (newStock >= 20) {
         current_state.value = states[0];
@@ -46,6 +50,7 @@ watch(() => props.stock, (newStock) => {
     }
 });
 
+// Initialiserar lagersstatusen vid montering av komponenten.
 onMounted(() => {
     if (props.stock >= 20) {
         current_state.value = states[0];

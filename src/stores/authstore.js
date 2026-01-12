@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import authentication from '@/axios/authentication.js';
 
+// Store för hantering av autentiseringsstatus.
 export const useAuthenticatedStore = defineStore('authenticated', () => {
   const isAuthenticated = ref(false);
 

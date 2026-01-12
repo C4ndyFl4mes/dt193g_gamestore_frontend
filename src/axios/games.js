@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// Spelrelaterade API-anrop.
 export default function games() {
 
     const client = axios.create({
@@ -13,11 +14,13 @@ export default function games() {
         }
     };
 
+    // Hämta spel, sorterade efter angivet fält.
     async function get(order) {
         const res = await client.get(`/products?order_by=${order}`, config);
         return res.data;
     }
 
+    // Lägg till nytt spel.
     async function post(fields) {
         const fd = new FormData();
         fd.append('file', fields.image);
@@ -32,11 +35,13 @@ export default function games() {
         return res.data;
     }
 
+    // Ta bort spel.
     async function remove(id) {
         const res = await client.delete(`/products?id=${id}`, config);
         return res.data;
     }
 
+    // Uppdatera spel.
     async function put(id, fields) {
         console.log(fields);
         const fd = new FormData();

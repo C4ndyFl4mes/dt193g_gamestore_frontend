@@ -4,12 +4,15 @@ import { ref, onMounted, computed } from 'vue';
 
 const props = defineProps(['labelid']);
 
+// Definierar den tvåvägsbundna modellen för valda genrer.
 const selectedList = defineModel('selectedGenres', {
     type: Array,
     default: () => []
 });
 
 const genresList = ref([]);
+
+// Beräknar alternativlistan genom att filtrera bort redan valda genrer.
 const optionsList = computed(() =>
     genresList.value.filter((genre) =>
         !selectedList.value.some((selected) => selected.id === genre.id)
@@ -17,7 +20,7 @@ const optionsList = computed(() =>
 );
 const current_genre = ref(null);
 
-
+// Hanterar val av en genre.
 function select() {
     if (current_genre.value && current_genre.value.id !== undefined) {
         selectedList.value.push({ ...current_genre.value });
@@ -25,10 +28,12 @@ function select() {
     }
 }
 
+// Hanterar avval av en genre.
 function deSelect(index) {
     selectedList.value.splice(index, 1);
 }
 
+// Hämtar genrer från servern vid montering av komponenten.
 onMounted(async () => {
     try {
         const data = await genres().get();

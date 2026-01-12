@@ -2,12 +2,14 @@
 import genres from '@/axios/genres';
 import { onMounted, ref } from 'vue';
 
-const genresList = ref(null);
+const genresList = ref([]);
 const add_genre_field = ref(null);
 const current_genre = ref(null);
 
+// Hanterar serverresponsen.
 const serverResponse = ref(null);
 
+// Hanterar formulärinlämning för att lägga till en ny genre.
 async function onSubmit() {
     try {
         const data = await genres().post({
@@ -39,6 +41,7 @@ async function onSubmit() {
     }
 }
 
+// Hanterar borttagning av en genre.
 async function remove() {
     try {
         if (!current_genre.value || !current_genre.value.id) {
@@ -79,6 +82,7 @@ async function remove() {
     }
 }
 
+// Hanterar uppdatering av en genre.
 async function update() {
     try {
         if (!current_genre.value || !current_genre.value.id) {
@@ -120,6 +124,7 @@ async function update() {
     }
 }
 
+// Hämtar alla genrer vid montering av komponenten.
 onMounted(async () => {
     try {
         const data = await genres().get();
