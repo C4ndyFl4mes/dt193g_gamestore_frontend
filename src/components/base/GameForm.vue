@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import GenreSelector from './GenreSelector.vue';
 import games from '@/axios/games';
 
-const emit = defineEmits(['cancel']);
+const emit = defineEmits(['close', 'updatedGame', 'deleteGame']);
 
 const props = defineProps({
     on_page: {
@@ -34,7 +34,7 @@ const props = defineProps({
         type: Number,
         default: 0
     },
-    rating: {
+    age_ratingID: {
         type: Number,
         default: 0
     },
@@ -53,9 +53,27 @@ const fields = ref({
     description: props.description,
     price: props.price,
     stock: props.stock,
-    rating: props.rating,
+    age_ratingID: props.age_ratingID,
     genres: props.genres
 });
+
+async function remove() {
+    try {
+        const data = await games().remove(Number(fields.value.id));
+        if (data.success) {
+            serverResponse.value = {
+                success: data.success,
+                message: data.message
+            }
+            emit('deleteGame', fields.value.id);
+            setTimeout(() => {
+                emit('close', false);
+            }, 500);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 function onFileChange(e) {
     const file = e.target?.files?.[0];
@@ -67,9 +85,7 @@ async function onSubmit() {
     switch (props.on_page) {
         case "add":
             try {
-                const payload = { ...fields.value, age_ratingID: fields.value?.rating };
-                const data = await games().post(payload);
-                console.log(data);
+                const data = await games().post(fields.value);
 
                 serverResponse.value = {
                     success: data.success,
@@ -82,7 +98,7 @@ async function onSubmit() {
                     description: undefined,
                     price: undefined,
                     stock: undefined,
-                    rating: undefined,
+                    age_ratingID: undefined,
                     genres: []
                 };
             } catch (error) {
@@ -95,7 +111,32 @@ async function onSubmit() {
 
             break;
         case "storage":
+            try {
+                const data = await games().put(Number(fields.value.id), fields.value);
 
+                if (data.success) {
+                    serverResponse.value = {
+                        success: true,
+                        message: "Successfully updated the game."
+                    }
+                    emit('updatedGame', data.game);
+                }
+            } catch (error) {
+                console.error(error);
+                if (error.code === "ERR_BAD_REQUEST") {
+                    if (error.response.data.message === "Validation error") {
+                        return serverResponse.value = {
+                            success: error.response.data.success,
+                            message: "Game " + error.response.data.errors[0].message
+                        };
+                    } else {
+                        return serverResponse.value = {
+                            success: false,
+                            message: error.response.data.message
+                        }
+                    }
+                }
+            }
             break;
         default:
             console.log("Error");
@@ -111,12 +152,12 @@ function onCancel() {
         description: props.description,
         price: props.price,
         stock: props.stock,
-        rating: props.rating,
+        age_ratingID: props.age_ratingID,
         genres: props.genres
     };
 
-    if(props.on_page === "storage") {
-        emit('cancel', false);
+    if (props.on_page === "storage") {
+        emit('close', false);
     }
 }
 </script>
@@ -148,7 +189,7 @@ function onCancel() {
                 </label>
                 <label>
                     <span>Age Rating</span>
-                    <select v-model.number="fields.rating">
+                    <select v-model.number="fields.age_ratingID">
                         <option value="1">E</option>
                         <option value="2">E10+</option>
                         <option value="3">T</option>
@@ -160,11 +201,20 @@ function onCancel() {
                     <label for="genre-label">Genres</label>
                     <GenreSelector v-model:selectedGenres="fields.genres" labelid="genre-label" />
                 </div>
-                <div class="max-w-[95%] flex justify-center mt-5 mb-10">
+                <div class="max-w-[95%] flex justify-center gap-y-4 flex-wrap mt-5 mb-10">
                     <button type="button" name="cancel" @click="onCancel"
-                        class="mx-auto px-8 py-2 rounded-xl bg-red-300 hover:bg-red-400 cursor-pointer">Cancel</button>
+                        class="mx-auto px-8 py-2 rounded-xl bg-red-300 hover:bg-red-400 cursor-pointer">
+                        <span v-if="on_page === 'add'">Cancel</span>
+                        <span v-else>Close</span>
+                    </button>
                     <button type="submit" name="save"
                         class="mx-auto px-8 py-2 rounded-xl bg-green-300 hover:bg-green-400 cursor-pointer">Save</button>
+                    <div v-if="on_page === 'storage'" class="flex-1">
+                        <button type="button" name="delete"
+                            class="mx-auto px-8 py-2 rounded-xl flex justify-center bg-red-300 hover:bg-red-400 cursor-pointer"
+                            @click="remove">Delete
+                        </button>
+                    </div>
                 </div>
                 <div v-if="serverResponse && serverResponse.success"
                     class="max-w-[95%] bg-green-300 text-center p-4 rounded-xl">

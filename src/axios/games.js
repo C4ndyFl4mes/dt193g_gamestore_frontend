@@ -32,6 +32,32 @@ export default function games() {
         return res.data;
     }
 
+    async function remove(id) {
+        const res = await client.delete(`/products?id=${id}`, config);
+        return res.data;
+    }
 
-    return { get, post };
+    async function put(id, fields) {
+        console.log(fields);
+        const fd = new FormData();
+        if (fields.image) {
+            fd.append('file', fields.image);
+        }
+        fd.append('title', fields.title);
+        fd.append('description', fields.description);
+        fd.append('price', String(fields.price));
+        fd.append('stock', String(fields.stock));
+        fd.append('age_ratingID', String(fields.age_ratingID));
+        if (!fields.genres || fields.genres.length === 0) {
+            fd.append("genres", JSON.stringify([]));
+        } else {
+            const genreIds = fields.genres.map(g => g.id);
+            fd.append("genres", JSON.stringify(genreIds));
+        }
+        const res = await client.put(`/products?id=${id}`, fd);
+        return res.data;
+    }
+
+
+    return { get, post, remove, put };
 }

@@ -2,7 +2,7 @@
 import stocked_image from '@/assets/images/stocked.svg';
 import low_image from '@/assets/images/low.svg';
 import out_image from '@/assets/images/out.svg';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const props = defineProps({
     image: {
@@ -35,6 +35,16 @@ const states = [
 ];
 
 const current_state = ref(null);
+
+watch(() => props.stock, (newStock) => {
+    if (newStock >= 20) {
+        current_state.value = states[0];
+    } else if (newStock === 0) {
+        current_state.value = states[2];
+    } else {
+        current_state.value = states[1];
+    }
+});
 
 onMounted(() => {
     if (props.stock >= 20) {

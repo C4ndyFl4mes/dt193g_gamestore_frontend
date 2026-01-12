@@ -8,7 +8,6 @@ export const useAuthenticatedStore = defineStore('authenticated', () => {
   async function setAuthenticationStatus() {
     try {
       const res = await authentication().is_user_logged_in();
-      console.log(res);
       isAuthenticated.value = res.data.success;
     } catch(error) {
       console.error(error);

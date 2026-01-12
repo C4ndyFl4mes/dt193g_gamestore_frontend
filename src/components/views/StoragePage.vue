@@ -4,10 +4,25 @@ import { onMounted, ref, watch } from 'vue';
 import GameItem from '../base/GameItem.vue';
 import asc_image from '@/assets/images/chevron_down.svg';
 import desc_image from '@/assets/images/chevron_up.svg';
+import GameOverlay from '../base/GameOverlay.vue';
 
-const gamesList = ref(null);
+const overlay = ref(false);
+const current_game = ref(null);
+
+const gamesList = ref([]);
 const sortingOn = ref("title");
 const sortingOrder = ref("_asc");
+
+function remove(deletedGameId) {
+    gamesList.value = gamesList.value.filter(game => game.id !== deletedGameId);
+}
+
+function update(updatedGame) {
+    const index = gamesList.value.findIndex(game => game.id === updatedGame.id);
+    if (index !== -1) {
+        gamesList.value[index] = updatedGame;
+    }
+}
 
 function on() {
     if (sortingOn.value === "title") {
@@ -51,7 +66,6 @@ watch(() => sortingOrder.value, async () => {
 onMounted(async () => {
     try {
         const data = await games().get();
-        console.log(data);
 
         if (data.success) {
             gamesList.value = data.games;
@@ -75,8 +89,9 @@ onMounted(async () => {
     </div>
     <div class="mx-auto w-200 max-w-[95%] mb-10 overflow-hidden">
         <GameItem v-for="item in gamesList" :key="item.id" :image="item.image_key" :title="item.title"
-            :stock="item.stock" />
+            :stock="item.stock" @click="overlay = true; current_game = item"  />
     </div>
+    <GameOverlay v-if="overlay" :game="current_game" @close="overlay = false" @updatedGame="update" @deleteGame="remove" />
 </template>
 
 <style scoped></style>
