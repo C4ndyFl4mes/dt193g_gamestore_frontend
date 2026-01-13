@@ -118,7 +118,16 @@ async function onSubmit() {
             break;
         case "storage":
             try {
-                const data = await games().put(Number(fields.value.id), fields.value);
+                const genre_ids = fields.value.genres.map(genre => genre.id);
+                const data = await games().put(Number(fields.value.id), {
+                    image: fields.value.image,
+                    title: fields.value.title,
+                    description: fields.value.description,
+                    price: fields.value.price,
+                    stock: fields.value.stock,
+                    age_ratingID: fields.value.age_ratingID,
+                    genres: genre_ids
+                });
 
                 if (data.success) {
                     serverResponse.value = {
