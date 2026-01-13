@@ -25,7 +25,8 @@ async function updateStock() {
         if (props.game.stock === null || isNaN(props.game.stock) || props.game.stock === '') {
             throw new Error("Stock must be a valid number.");
         }
-        const data = await games().put(props.game.id, props.game);
+        
+        const data = !editing ? await games().put(props.game.id, props.game.stock) : await games().put(props.game.id, props.game);
 
         if (data.success) {
             serverResponse.value = {
@@ -64,7 +65,6 @@ async function updateStock() {
                 &times;
             </button>
             <div v-if="!editing">
-
                 <h2 class="text-2xl font-bold mb-4">{{ game.title }}</h2>
                 <img :src="game.image_key" alt="Game Image" class="w-full h-auto mb-4" />
                 <form class="mb-4" @submit.prevent="updateStock">
