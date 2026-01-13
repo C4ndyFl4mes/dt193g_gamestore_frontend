@@ -119,6 +119,8 @@ async function onSubmit() {
         case "storage":
             try {
                 const genre_ids = fields.value.genres.map(genre => genre.id);
+                console.log('Genre IDs:', genre_ids); // Add this debug line
+                console.log('Fields genres:', fields.value.genres); // Add this debug line
                 const data = await games().put(Number(fields.value.id), {
                     image: fields.value.image,
                     title: fields.value.title,
@@ -135,6 +137,9 @@ async function onSubmit() {
                         message: "Successfully updated the game."
                     }
                     emit('updatedGame', data.game);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 700);
                 }
             } catch (error) {
                 console.error(error);

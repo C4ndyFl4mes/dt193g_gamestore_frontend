@@ -43,7 +43,6 @@ export default function games() {
 
     // Uppdatera spel.
     async function put(id, fields) {
-        console.log(fields);
         const fd = new FormData();
         if (fields.image) {
             fd.append('file', fields.image);
@@ -56,8 +55,7 @@ export default function games() {
         if (!fields.genres || fields.genres.length === 0) {
             fd.append("genres", JSON.stringify([]));
         } else {
-            const genreIds = fields.genres.map(g => g.id);
-            fd.append("genres", JSON.stringify(genreIds));
+            fd.append("genres", JSON.stringify(fields.genres));
         }
         const res = await client.put(`/products?id=${id}`, fd);
         return res.data;
