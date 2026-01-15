@@ -6,19 +6,19 @@ En frontend-applikation för att hantera lagret i en spelbutik. Applikationen ti
 ## Komponenter
 
 ### Base
-GameForm.vue - Ett formulär för att lägga till och uppdatera spel i lagret. Innehåller fält för spelnamn, plattform, pris och lagerstatus.
+GameForm.vue - Ett formulär för att lägga till och uppdatera spel i lagret. Innehåller fält för spelnamn, genre, åldersklassificieringsid, pris och lagerstatus.
 GameOverlay.vue - En överläggskomponent som visar detaljerad information om ett spel när användaren klickar på det i spel-listan. Här kan användaren också uppdatera eller ta bort spelet.
 GenreForm.vue - Ett formulär för att lägga till nya genrer till spelbutiken. Men också radera eller uppdatera befintliga genrer.
 GenreSelector.vue - En dropdown-komponent som låter användaren välja en genre när de lägger till eller uppdaterar ett spel.
-GameItem.vue - En komponent som representerar ett enskilt spel i spel-listan. Visar grundläggande information som lagersaldostatus om spelet och hanterar klickhändelser för att visa GameOverlay.
+GameItem.vue - En komponent som representerar ett enskilt spel i spellistan. Visar grundläggande information som lagersaldostatus om spelet och hanterar klickhändelser för att visa GameOverlay.
 
 ### Layout
 Footer.vue - En enkel sidfot för applikationen som innehåller upphovsrättsinformation.
 Header.vue - En sidhuvudskomponent som innehåller applikationens titel.
-Navigation.vue - En navigationsmeny som låter användaren navigera mellan olika sektioner av applikationen, såsom spel-listan och genre-hantering.
+Navigation.vue - En navigationsmeny som låter användaren navigera mellan olika sektioner av applikationen, såsom spel-listan och spel och genre hantering.
 
 ### Views
-AddPage.vue - En vy för att lägga till nya spel i lagret. Innehåller GameForm-komponenten och GenreForm.
+AddPage.vue - En vy för att lägga till nya spel och genrer i lagret. Innehåller GameForm-komponenten och GenreForm.
 LoginPage.vue - En vy för användarinloggning. Innehåller ett enkelt inloggningsformulär.
 StoragePage.vue - Huvudvyn för applikationen som visar spellistan. Spellistan består av flera GameItem-komponenter och hanterar visningen av GameOverlay när ett spel väljs.
 
@@ -36,13 +36,13 @@ Applikationen använder Pinia för att hantera autentiseringstillstånd. Auth St
 - `setAuthenticated` - En åtgärd för att uppdatera autentiseringstillståndet.
 
 ## Axios
-Axios används för att göra HTTP-förfrågningar till backend-API:et. Axios används i olika komponenter för att hämta, lägga till, uppdatera och ta bort spel från lagret samt autentisering.
+Axios används för att göra HTTP-förfrågningar till API:et. Axios används i olika komponenter för att hämta, lägga till, uppdatera och ta bort spel och genrer samt autentisering.
 
 ### Authentication
-Funktioner för att hantera användarinloggning och utloggning genom att skicka förfrågningar till backend-API:et.
+Funktioner för att hantera användarinloggning och utloggning genom att skicka förfrågningar till API:et.
 
 ### Games
-Funktioner för att hämta, lägga till, uppdatera och ta bort spel i lagret genom att kommunicera med backend-API:et.
+Funktioner för att hämta, lägga till, uppdatera och ta bort spel i lagret genom att kommunicera med API:et.
 
 ### Genres
-Funktioner för att hantera genrer, inklusive att hämta, lägga till, uppdatera och ta bort genrer från backend-API:et.
+Funktioner för att hantera genrer, inklusive att hämta, lägga till, uppdatera och ta bort genrer från API:et.
