@@ -97,6 +97,7 @@ async function onSubmit() {
                     success: data.success,
                     message: "Successfully added a game to storage."
                 }
+                
                 fields.value = {
                     id: undefined,
                     image: undefined,
@@ -114,13 +115,10 @@ async function onSubmit() {
                     message: error.response.data.message
                 }
             }
-
             break;
         case "storage":
             try {
                 const genre_ids = fields.value.genres.map(genre => genre.id);
-                console.log('Genre IDs:', genre_ids); // Add this debug line
-                console.log('Fields genres:', fields.value.genres); // Add this debug line
                 const data = await games().put(Number(fields.value.id), {
                     image: fields.value.image,
                     title: fields.value.title,
