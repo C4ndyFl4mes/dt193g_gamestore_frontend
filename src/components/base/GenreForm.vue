@@ -99,6 +99,10 @@ async function update() {
                 genresList.value[index].genre_name = data.genre.genre_name;
                 current_genre.value = null;
             }
+            serverResponse.value = {
+                success: data.success,
+                message: `Successfully updated ${data.genre.genre_name}`
+            };
         }
     } catch (error) {
         console.error(error);

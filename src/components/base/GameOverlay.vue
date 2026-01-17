@@ -26,7 +26,7 @@ async function updateStock() {
             throw new Error("Stock must be a valid number.");
         }
         
-        const data = !editing.value ? await games().put(props.game.id, props.game.stock) : await games().put(props.game.id, props.game);
+        const data = await games().put(props.game.id, props.game)
 
         if (data.success) {
             serverResponse.value = {
